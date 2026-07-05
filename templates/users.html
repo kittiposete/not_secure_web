@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}User Directory{% endblock %}
+{% block content %}
+<h2>User Directory</h2>
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <p style="color: var(--text-muted); margin: 0;">Showing page {{ page }} of users.</p>
+        <div style="display: flex; gap: 10px;">
+            <a href="?page={{ page - 1 }}" class="btn btn-outline" {% if page <= 1 %}style="pointer-events: none; opacity: 0.5;"{% endif %}>Previous</a>
+            <a href="?page={{ page + 1 }}" class="btn btn-outline">Next</a>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>
+                    <a href="{{ url_for('user_profile', user_id=user[0]) }}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Profile</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

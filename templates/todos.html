@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}To-Do List{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+        <h2 style="margin: 0;">Tasks</h2>
+    </div>
+    
+    <form class="input-group" action="{{ url_for('todos') }}" method="GET" style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+        <input type="text" name="search" placeholder="Search tasks..." value="{{ search }}" autocomplete="off" style="margin-bottom: 0;">
+        <button type="submit" class="btn btn-outline" style="padding: 12px 24px;">Search</button>
+    </form>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form class="input-group" action="{{ url_for('add_todo') }}" method="POST" style="display: flex; gap: 10px; margin-bottom: 2rem;">
+        <input type="text" name="task" placeholder="What needs to be done?" required autocomplete="off" style="margin-bottom: 0;">
+        <button type="submit" class="btn" style="padding: 12px 24px;">Add</button>
+    </form>
+    
+    <ul style="list-style: none; padding: 0; margin: 0;">
+        {% for todo in todos %}
+            <li style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; flex-grow: 1;">
+                    <span style="font-size: 1.05rem; font-weight: 500; {% if todo[2] %}text-decoration: line-through; color: var(--text-muted);{% endif %}">{{ todo[1] }}</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <form action="{{ url_for('toggle_todo', todo_id=todo[0]) }}" method="POST" style="margin:0;">
+                        <button type="submit" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer;">
+                            ✓
+                        </button>
+                    </form>
+                    <form action="{{ url_for('delete_todo', todo_id=todo[0]) }}" method="POST" style="margin:0;">
+                        <button type="submit" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer;">
+                            ✕
+                        </button>
+                    </form>
+                </div>
+            </li>
+        {% else %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <p>No tasks found.</p>
+            </div>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Overview</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card" style="margin: 0; padding: 1.5rem;">
+        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Total Users</div>
+        <div style="font-size: 2rem; font-weight: 800; margin-top: 0.5rem;">{{ stats.users }}</div>
+    </div>
+    <div class="card" style="margin: 0; padding: 1.5rem;">
+        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Tasks Completed</div>
+        <div style="font-size: 2rem; font-weight: 800; margin-top: 0.5rem; color: var(--success);">{{ stats.tasks_completed }}</div>
+    </div>
+    <div class="card" style="margin: 0; padding: 1.5rem;">
+        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Unread Messages</div>
+        <div style="font-size: 2rem; font-weight: 800; margin-top: 0.5rem; color: #f59e0b;">{{ stats.unread }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0;">Recent Activity</h3>
+        <form method="GET" action="{{ url_for('dashboard') }}" style="display: flex; gap: 10px;">
+            <select name="range" class="input-group" style="margin: 0; padding: 8px 12px; width: auto; background: rgba(0,0,0,0.3);">
+                <option value="7days" {% if request.args.get('range') == '7days' %}selected{% endif %}>Last 7 Days</option>
+                <option value="30days" {% if request.args.get('range') == '30days' %}selected{% endif %}>Last 30 Days</option>
+                <option value="all" {% if request.args.get('range') == 'all' %}selected{% endif %}>All Time</option>
+            </select>
+            <select name="filter" class="input-group" style="margin: 0; padding: 8px 12px; width: auto; background: rgba(0,0,0,0.3);">
+                <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All Activity</option>
+                <option value="tasks" {% if request.args.get('filter') == 'tasks' %}selected{% endif %}>Tasks Only</option>
+                <option value="logins" {% if request.args.get('filter') == 'logins' %}selected{% endif %}>Logins Only</option>
+            </select>
+            <button type="submit" class="btn btn-outline" style="padding: 8px 16px;">Filter</button>
+        </form>
+    </div>
+    <p style="color: var(--text-muted);">Activity view for range: {{ request.args.get('range', '7days') }} (filter: {{ request.args.get('filter', 'all') }})</p>
+    <table>
+        <thead>
+            <tr><th>Date</th><th>Action</th><th>User</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Today</td><td>Logged in</td><td>You</td></tr>
+            <tr><td>Yesterday</td><td>Completed Task</td><td>Admin</td></tr>
+            <tr><td>2 Days Ago</td><td>Joined System</td><td>User 5</td></tr>
+            <tr><td>3 Days Ago</td><td>Updated Profile</td><td>User 12</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

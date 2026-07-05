@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Inbox{% endblock %}
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <!-- Compose Card -->
+    <div class="card">
+        <h3>Compose Message</h3>
+        <form action="{{ url_for('send_message') }}" method="POST">
+            <div class="input-group">
+                <label>To (Email)</label>
+                <input type="text" name="recipient" value="{{ request.args.get('compose_to', '') }}" required>
+            </div>
+            <div class="input-group">
+                <label>Subject</label>
+                <input type="text" name="subject" required>
+            </div>
+            <div class="input-group">
+                <label>Message</label>
+                <textarea name="body" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Send</button>
+        </form>
+    </div>
+    
+    <!-- Messages List -->
+    <div class="card">
+        <h3>Your Messages</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for msg in messages %}
+            <li style="padding: 1rem; border-bottom: 1px solid var(--border); {% if not msg[5] %}background: rgba(255,255,255,0.05);{% endif %}">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>From: {{ msg[6] }}</strong>
+                    <span style="color: var(--text-muted); font-size: 0.8rem;">Just now</span>
+                </div>
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">{{ msg[3] }}</div>
+                <div style="color: var(--text-muted);">{{ msg[4] }}</div>
+            </li>
+            {% else %}
+            <p style="color: var(--text-muted);">Your inbox is empty.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

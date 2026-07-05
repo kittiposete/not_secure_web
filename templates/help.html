@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Help Center{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-bottom: 2rem;">How can we help?</h2>
+    
+    <form method="GET" action="{{ url_for('help_center') }}" style="display: flex; gap: 10px; margin-bottom: 3rem;">
+        <input type="text" name="q" placeholder="Search knowledge base..." value="{{ request.args.get('q', '') }}" class="input-group" style="flex-grow: 1; margin: 0; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    
+    {% if request.args.get('q') %}
+        <p>Search results for: <strong>{{ request.args.get('q') }}</strong></p>
+        <p style="color: var(--text-muted);">No results found. Please try another term.</p>
+    {% else %}
+        <h3>Frequently Asked Questions</h3>
+        <div style="margin-bottom: 1.5rem;">
+            <h4>How do I reset my password?</h4>
+            <p style="color: var(--text-muted);">You can change your password in the Settings menu. If you forgot it, please contact an administrator.</p>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <h4>How do I use the To-Do list?</h4>
+            <p style="color: var(--text-muted);">Navigate to the To-Do list page from the sidebar to add, complete, and delete tasks.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

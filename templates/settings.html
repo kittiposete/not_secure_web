@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2>Account Settings</h2>
+
+{% if msg %}<div class="alert alert-success">{{ msg }}</div>{% endif %}
+
+<div class="card">
+    <h3>Update Profile</h3>
+    <form action="{{ url_for('update_profile') }}" method="POST">
+        <div class="input-group">
+            <label>Bio (Markdown / HTML supported)</label>
+            <textarea name="bio" rows="4">{{ user[3] if user[3] else '' }}</textarea>
+        </div>
+        <button type="submit" class="btn">Save Profile</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Change Password</h3>
+    <form action="{{ url_for('change_password') }}" method="POST">
+        <div class="input-group">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required>
+        </div>
+        <div class="input-group">
+            <label>New Password</label>
+            <input type="password" name="new_password" required>
+        </div>
+        <button type="submit" class="btn">Update Password</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Upload Avatar</h3>
+    <!-- Multipart form to test upload vulnerabilities -->
+    <form action="{{ url_for('upload_avatar') }}" method="POST" enctype="multipart/form-data">
+        <div class="input-group">
+            <label>Select Image</label>
+            <input type="file" name="avatar" accept="image/*">
+        </div>
+        <button type="submit" class="btn">Upload</button>
+    </form>
+</div>
+{% endblock %}
